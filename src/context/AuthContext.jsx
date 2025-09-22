@@ -4,7 +4,21 @@ import { supabase } from "../supabaseClient";
 const AuthContext = createContext();
 
 export const AuthContextProvider =  ({children}) => {
+    // Initial State
+    const initialState = [
+        {
+            id: '',
+            display_name: '',
+            bio: '',
+            role: ''
+        }
+    ]
+
+    // States
     const [session, setSession] = useState(undefined);
+    const [profile, setProfile] = useState(initialState)
+    const [loading, setLoading] = useState(true);
+
 
     //Signup
     const signUpNewUser = async (displayName, email, password) => {
@@ -40,7 +54,6 @@ export const AuthContextProvider =  ({children}) => {
             }
 
             // If no error, return success
-            console.log("Sign-in success:", data);
             return { success: true, data }; // Return the user data
         } catch (error) {
             // Handle unexpected issues
@@ -52,16 +65,44 @@ export const AuthContextProvider =  ({children}) => {
         }
     };
 
-    //UseEffect on Supabase Auth
-    useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session);
-        });
+    // Fetches the role
+    const fetchProfile = async (userId) => {
+        const {data, error} = await supabase.from("profiles")
+            .select("*")
+            .eq("id", userId)
+            .single();
+        if (error) {
+            console.error("Error fetching user role:", error);
+            return null;
+        }
 
-        supabase.auth.onAuthStateChange((_event, session) => {
-            setSession(session);
-        });
-    }, []);
+        return data || null;
+    }
+
+    // Sets the role through applying user uid to fetchProfile() function
+    // UseEffect on Supabase Auth
+    useEffect(() => {
+        supabase.auth.getSession().then(async ({ data: { session } }) => {
+            if (session?.user) {
+                setSession(session)
+                const userRole = await fetchProfile(session?.user?.id);
+                // console.log(userRole);
+                setProfile(userRole);
+            }
+            else{
+                setProfile([])
+            }
+
+            setLoading(false);
+        })
+        const {
+            data: { subscription },
+        } = supabase.auth.onAuthStateChange((_event, session) => {
+            setSession(session)
+
+        })
+        return () => subscription.unsubscribe()
+    }, [])
 
     //Signout
     async function signOut() {
@@ -73,7 +114,7 @@ export const AuthContextProvider =  ({children}) => {
     
     // Return
     return (
-        <AuthContext.Provider value={{session, signUpNewUser, signInUser}}>
+        <AuthContext.Provider value={{session, profile, loading, signUpNewUser, signInUser, signOut}}>
             {children}
         </AuthContext.Provider>
 

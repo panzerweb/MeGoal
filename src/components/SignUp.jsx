@@ -36,6 +36,12 @@ export const SignUp = () => {
 
     return (
         <>  
+        <h1 className='text-center font-semibold italic'>
+            <span className='text-yellow-500'>Me</span>
+            <span className='text-green-500'>Goal</span>
+        </h1>
+        <p className='text-center text-gray-300'>List your goals, move your life</p>
+
         <div className='flex justify-center'>
             <form onSubmit={handleSignUp} className="max-w-fit m-auto">
                 <div className="p-5 w-100">
@@ -72,13 +78,13 @@ export const SignUp = () => {
                             placeholder="Password"
                         />
                     </div>
-                    <button type="submit" disabled={loading} className="w-full mt-4">
+                    <button type="submit" disabled={loading} className="w-full mt-4 bg-black p-4 rounded-md hover:bg-gray-950 hover:text-teal-500 transition-all">
                         Sign Up
                     </button>
 
                     {error && <p className="text-red-600 text-center pt-4">{error}</p>}
                     
-                    <p className='text-center mt-5'>Already have an account? <Link to="/signin">Sign in</Link></p>     
+                    <p className='text-center mt-5'>Already have an account? <Link to="/signin" className='text-blue-500'>Sign in</Link></p>     
                 </div>    
             </form>
         </div>

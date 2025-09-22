@@ -37,41 +37,46 @@ export const Signin = () => {
 
   return (
       <>  
-      <div className='flex justify-center'>
-          <form onSubmit={handleSignIn} className="max-w-fit m-auto">
-              <div className="p-5 w-100">
-                  <div className="flex flex-col py-4">
-                  <label htmlFor="Email">Email</label>
-                      <input
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="p-3 mt-2 bg-gray-900 rounded-md"
-                          type="email"
-                          name="email"
-                          id="email_address"
-                          placeholder="Email"
-                      />
-                  </div>
-                  <div className="flex flex-col py-4">
-                  <label htmlFor="Password">Password</label>
-                      <input
-                          onChange={(e) => setPassword(e.target.value)}
-                          className="p-3 mt-2 bg-gray-900 rounded-md"
-                          type="password"
-                          name="password"
-                          id="password"
-                          placeholder="Password"
-                      />
-                  </div>
-                  <button type="submit" disabled={loading} className="w-full mt-4">
-                      Sign In
-                  </button>
+      <h1 className='text-center font-semibold italic'>
+        <span className='text-yellow-500'>Me</span>
+        <span className='text-green-500'>Goal</span>
+      </h1>
+      <p className='text-center text-gray-300'>List your goals, move your life</p>
+        <div className='flex justify-center'>
+            <form onSubmit={handleSignIn} className="max-w-fit m-auto">
+                <div className="p-5 w-100">
+                    <div className="flex flex-col py-4">
+                    <label htmlFor="Email">Email</label>
+                        <input
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="p-3 mt-2 bg-gray-900 rounded-md"
+                            type="email"
+                            name="email"
+                            id="email_address"
+                            placeholder="Email"
+                        />
+                    </div>
+                    <div className="flex flex-col py-4">
+                    <label htmlFor="Password">Password</label>
+                        <input
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="p-3 mt-2 bg-gray-900 rounded-md"
+                            type="password"
+                            name="password"
+                            id="password"
+                            placeholder="Password"
+                        />
+                    </div>
+                    <button type="submit" disabled={loading} className="w-full mt-4 bg-black p-4 rounded-md hover:bg-gray-950 hover:text-teal-500 transition-all">
+                        Sign In
+                    </button>
 
-                  {error && <p className="text-red-600 text-center pt-4">{error}</p>}
-                  
-                  <p className='text-center mt-5'>Already have an account? <Link to="/signup">Sign in</Link></p>     
-              </div>    
-          </form>
-      </div>
+                    {error && <p className="text-red-600 text-center pt-4">{error}</p>}
+                    
+                    <p className='text-center mt-5'>Already have an account? <Link to="/signup" className='text-blue-500'>Sign in</Link></p>     
+                </div>    
+            </form>
+        </div>
       </>
   )
 }
