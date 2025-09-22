@@ -1,13 +1,19 @@
+// Imports
 import React, { use, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { UserAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
+// Main Sign In component
 export const Signin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const [showPassword, setShowpassword] = useState(false);
 
   const {signInUser} = UserAuth();
   const navigate = useNavigate();
@@ -34,6 +40,11 @@ export const Signin = () => {
       }
   }
 
+  // Handles show password
+  const handleToggle = () => {
+    setShowpassword(!showPassword);
+    console.log(`Password visibility: ${showPassword}`);
+  }
 
   return (
       <>  
@@ -57,16 +68,28 @@ export const Signin = () => {
                         />
                     </div>
                     <div className="flex flex-col py-4">
-                    <label htmlFor="Password">Password</label>
+                      <label htmlFor="password" className="mb-1">Password</label>
+
+                      <div className="relative w-full">
                         <input
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="p-3 mt-2 bg-gray-900 rounded-md"
-                            type="password"
-                            name="password"
-                            id="password"
-                            placeholder="Password"
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="w-full p-3 pr-10 mt-2 bg-gray-900 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                          type={showPassword ? "text" : "password"}
+                          name="password"
+                          id="password"
+                          placeholder="Password"
                         />
+
+                        {/* Icon inside input */}
+                        <span
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 hover:text-white"
+                          onClick={handleToggle}
+                        >
+                          {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        </span>
+                      </div>
                     </div>
+
                     <button type="submit" disabled={loading} className="w-full mt-4 bg-black p-4 rounded-md hover:bg-gray-950 hover:text-teal-500 transition-all">
                         Sign In
                     </button>

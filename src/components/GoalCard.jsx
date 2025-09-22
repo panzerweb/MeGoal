@@ -1,15 +1,24 @@
 import { useState } from 'react';
 import PublishIcon from '@mui/icons-material/Publish';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import RestoreIcon from '@mui/icons-material/Restore';
+import { useGoalsContext } from '../context/GoalsContext';
 
 export const GoalCard = ({goal}) => {
+  // Context
+  const {updateStatus} = useGoalsContext();
   // States
   const [openDropdown, setOpenDropdown] = useState(false);
 
   // Functions
   const toggleDropdown = () => setOpenDropdown(!openDropdown);
   const handleEdit = () => alert('Edit clicked!');
-  const handleAchieved = () => alert('Goal achieved!');
+
+  // Handles updating status of goal
+  const handleAchieved = async () => {
+    await updateStatus(goal.id, goal.g_status, goal.g_name);
+  }
+
   const handleDelete = () => alert('Delete clicked!');
 
   // Render
@@ -20,16 +29,30 @@ export const GoalCard = ({goal}) => {
         <div className="flex items-center space-x-4">
 
           <div className="bg-cyan-600 p-3 rounded-full">
-            <PublishIcon 
-              fontSize="medium" 
-              onClick={handleAchieved} 
-              sx={{cursor: "pointer"}} 
-            />
+            {
+              goal.g_status === 'achieved' && (
+                <RestoreIcon 
+                  fontSize="medium" 
+                  onClick={handleAchieved} 
+                  sx={{cursor: "pointer"}} 
+                />
+              )
+            }
+            {
+              goal.g_status === 'pending' && (
+                <PublishIcon 
+                  fontSize="medium" 
+                  onClick={handleAchieved} 
+                  sx={{cursor: "pointer"}} 
+                />
+              )
+            }
+
           </div>
 
           <div className="goal-title">
             <h3 className="text-md font-semibold">
-              {goal.name}
+              {goal.g_name}
             </h3>
           </div>
         </div>

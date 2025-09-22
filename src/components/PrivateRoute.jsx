@@ -9,18 +9,21 @@ import { Navigate } from "react-router-dom";
 
 const PrivateRoute = ({children, roles}) => {
     const {session, loading, profile} = UserAuth();
-    const authenticated = session?.user?.aud;
+    // const authenticated = session?.user?.aud;
 
     if (loading) {
-        return <>Loading...</>; // don’t redirect until finished
+        return <>Fetching from database...</>; // don’t redirect until finished
     }
+    
     if (!session) {
         // Not logged in
-        return <Navigate to="/signin" />;
+        console.log("Not logged in")
+        return <Navigate to="/signin" replace />;
     }
 
-    if (roles && !roles.includes(profile.role)) {
-        return <Navigate to="/unauthorized" />;
+    if (roles && !roles.includes(profile?.role)) {
+        console.log("Unauthorized role:", profile?.role);
+        return <Navigate to="/unauthorized" replace />;
     }
     
     return children;

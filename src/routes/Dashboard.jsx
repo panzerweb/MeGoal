@@ -1,35 +1,86 @@
 import React, { useEffect, useState } from 'react'
+import { supabase } from '../supabaseClient';
 // Custom imports - Context, components, router, etc.
 import { UserAuth } from '../context/AuthContext'
 import { Navbar } from '../components/Navbar';
 import { colors, Button } from '@mui/material';
 import { GoalCard } from '../components/GoalCard';
+import { useGoalsContext } from '../context/GoalsContext';
+import Swal from 'sweetalert2'
 
 // Sample goal data:
-const goalsData = [
-  { id: 1, name: "Become a skilled programmer", status: "pending" },
-  { id: 2, name: "Build a personal website", status: "achieved" },
-  { id: 3, name: "Learn ReactJS", status: "pending" },
-  { id: 4, name: "Create a blog CRUD", status: "achieved" },
-];
+// const goalsData = [
+//   { id: 1, name: "Become a skilled programmer", status: "pending" },
+//   { id: 2, name: "Build a personal website", status: "achieved" },
+//   { id: 3, name: "Learn ReactJS", status: "pending" },
+//   { id: 4, name: "Create a blog CRUD", status: "achieved" },
+// ];
 
 export const Dashboard = () => {
 
   // Fetch current session from Context
   const {session, loading, profile} = UserAuth();
+  // Values from goalsContext
+  const {formData, handleChange, insertGoal, goalsData, setGoalsData} = useGoalsContext();
 
-  // Functions
+  useEffect(() => {
+    const fetchedGoals = async () => {
+      const { data, error } = await supabase
+        .from('goals')
+        .select()
+
+      if (error) {
+        console.log(error);
+      }
+      console.log(data);
+      setGoalsData(data);
+    }
+    fetchedGoals();
+  }, [])
+
+  // Handling insertion
+  const handleInsertGoal = async (e) => {
+    e.preventDefault();
+
+    await insertGoal();
+
+    // For non-reload fetching
+    const { data, error } = await supabase.from("goals").select();
+
+    if (!error) {
+
+      // Change the goalsData state - check Context, now you can access goalsData
+      setGoalsData(data);
+      // After setting goal data
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Goal added successfully"
+      });
+    }
+    else{
+      Swal.fire({
+        title: "Error",
+        text: `Error: ${error}`,
+        icon: "error"
+      });
+    }
+
+  }
 
   // Filter data, replace hardcoded goalsData with real fetched data
   const [filter, setFilter] = useState("pending");
-  const filteredGoals = goalsData.filter(goal => goal.status === filter);
-
-  // Handling insertion
-  const handleInsertGoal = (e) => {
-    e.preventDefault();
-
-    alert("Submitted");
-  }
+  const filteredGoals = goalsData.filter(goal => goal.g_status === filter);
 
   // Loading render
   if (loading) {
@@ -59,6 +110,8 @@ export const Dashboard = () => {
                           type="text" 
                           name="g_name" 
                           id="g_name" 
+                          value={formData.g_name}
+                          onChange={handleChange}
                           placeholder="Add your goals..."
                           className="input-fields w-100 p-2 rounded-md border border-teal-400 focus:border-teal-500 focus:ring-2 focus:ring-teal-500 outline-none"
                         />
