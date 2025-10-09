@@ -10,6 +10,7 @@ import { Unauthorized } from "./routes/Unauthorized";
 import { Account } from "./routes/Account";
 import { Notes } from "./routes/Notes";
 import { Blogs } from "./routes/Blogs";
+import UpdateGoal from "./routes/UpdateGoal";
 
 // Main Router
 export const router = createBrowserRouter([
@@ -23,6 +24,14 @@ export const router = createBrowserRouter([
         element: (
             <PrivateRoute roles={['admin', 'user']}>
                 <Dashboard />
+            </PrivateRoute>
+        )
+    },
+    {
+        path: "/dashboard/:id", 
+        element: (
+            <PrivateRoute roles={['admin', 'user']}>
+                <UpdateGoal />
             </PrivateRoute>
         )
     },

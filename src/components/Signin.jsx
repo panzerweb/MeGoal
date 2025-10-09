@@ -96,7 +96,7 @@ export const Signin = () => {
 
                     {error && <p className="text-red-600 text-center pt-4">{error}</p>}
                     
-                    <p className='text-center mt-5'>Already have an account? <Link to="/signup" className='text-blue-500'>Sign in</Link></p>     
+                    <p className='text-center mt-5'>Already have an account? <Link to="/signup" className='text-blue-500'>Sign Up</Link></p> 
                 </div>    
             </form>
         </div>

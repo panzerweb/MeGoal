@@ -13,6 +13,7 @@
 :root {
   --background: #283b48;
   --primary:  #222831;
+  --primary-dark:  #1b2027;
   --accent: #00a6c0;
   --accent-shade: #096371;
 
@@ -46,4 +47,9 @@ button{
 
 .goal-wrapper, .dropdown-wrapper{
   background-color: var(--primary);
+  transition: all 0.1s linear;
+}
+
+.goal-wrapper:hover{
+  background-color: var(--primary-dark);
 }

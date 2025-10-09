@@ -3,6 +3,14 @@ import { supabase } from "../supabaseClient";
 import { UserAuth } from "./AuthContext";
 import Swal from "sweetalert2";
 
+/*
+    This GoalsContext will handle the CREATE, READ???, UPDATE, DELETE status
+    of our Goal tables.
+    The initial state sets the current values that are manually inputted
+    The formData state will be used for inputting values
+    The goalsData state will the the current data fetched
+*/
+
 const GoalsContext = createContext();
 
 export const GoalsContextProvider = ({children}) => {
@@ -20,29 +28,30 @@ export const GoalsContextProvider = ({children}) => {
             g_tags: [],
             g_status: 'pending',
         };
-    const [formData, setFormData] = useState(initialState);
+    const [shortGoalData, setShortGoalData] = useState(initialState);
+    const [longGoalData, setLongGoalData] = useState(initialState);
     const [goalsData, setGoalsData] = useState([])
 
     // Handles changes in input values
-    const handleChange = (e) => {
+    const handleChange = (e, setState) => {
         const {name, value} = e.target;
-        setFormData((prev) =>  ({
+        setState((prev) =>  ({
         ...prev,
         [name]: value,
         }));
     };
 
-    const insertGoal = async () => {
+    const insertGoal = async (term, formData, setState) => {
         const { data, error } = await supabase
             .from('goals')
-            .insert([{...formData, user_id: profile.id}]) //Inserts the user id
+            .insert([{...formData, g_term: term, user_id: profile.id}]) //Inserts the user id
             
         if (error) {
             console.log(error)
             return error;
         }
 
-        setFormData(initialState); //Reset form data, so that it clears the field
+        setState(initialState); //Reset form data, so that it clears the field
 
         return data;
     }
@@ -89,7 +98,7 @@ export const GoalsContextProvider = ({children}) => {
                 ))
             );
             // Reset input fields
-            setFormData(initialState);
+            // setFormData(initialState);
         }
     }
     // UPDATE STATUS ENDS
@@ -97,7 +106,7 @@ export const GoalsContextProvider = ({children}) => {
 
     // Return all values
     return (
-        <GoalsContext.Provider value={{formData, setFormData, goalsData, setGoalsData, handleChange, insertGoal, updateStatus}}>
+        <GoalsContext.Provider value={{shortGoalData, setShortGoalData, longGoalData, setLongGoalData, goalsData, setGoalsData, handleChange, insertGoal, updateStatus}}>
             {children}
         </GoalsContext.Provider>
     )
