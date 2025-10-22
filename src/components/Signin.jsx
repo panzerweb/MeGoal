@@ -26,9 +26,11 @@ export const Signin = () => {
         setError(error); // Set the error message if sign-in fails
 
         // Set a timeout to clear the error message after a specific duration (e.g., 3 seconds)
-        setTimeout(() => {
-          setError("");
-        }, 3000); // 3000 milliseconds = 3 seconds
+        if (error) {
+          setError(error);
+          setTimeout(() => setError(""), 3000);
+          return;
+        }
       } else {
         // Redirect or perform any necessary actions after successful sign-in
         navigate("/dashboard");

@@ -104,6 +104,14 @@ export const GoalsContextProvider = ({children}) => {
     // UPDATE STATUS ENDS
     // ===========================================================================
 
+    // UPDATE GOAL STARTS
+
+    // UPDATE GOAL ENDS
+
+    // DELETE GOAL STARTS
+
+    // DELETE GOAL ENDS
+
     // Return all values
     return (
         <GoalsContext.Provider value={{shortGoalData, setShortGoalData, longGoalData, setLongGoalData, goalsData, setGoalsData, handleChange, insertGoal, updateStatus}}>
