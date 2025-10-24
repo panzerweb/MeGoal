@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { UserAuth } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
 
+// Loader component
+import Loader from "./Loader";
+
 
 // Protected/Private route -> safely check the authorization of each logged users
 // profile -> data from public.profiles
@@ -13,7 +16,12 @@ const PrivateRoute = ({children, roles}) => {
 
     // 1. Wait for loading
     if (loading) {
-        return <>Loading...</>; // don’t redirect until finished
+        return (
+            <>
+                <Loader />
+                <h3 className="text-center text-gray-400 font-semibold">Loading...</h3>
+            </>
+        ); // don’t redirect until finished
     }
     
     // 2. Wait until profile is actually fetched
@@ -26,7 +34,12 @@ const PrivateRoute = ({children, roles}) => {
     // 3. Check if profile.role is ready
     if(!profile || !profile.role){
         console.log("Profile not ready yet...");
-        return <p>Fetching user profile...</p>;
+        return (
+        <>
+            <Loader />
+            <h3 className="text-center text-gray-400 font-semibold">Fetching user profile...</h3>
+        
+        </>);
     }
 
 

@@ -5,6 +5,7 @@ import { UserAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import SweetAlert from './SweetAlert';
 
 // Main Sign In component
 export const Signin = () => {
@@ -27,6 +28,7 @@ export const Signin = () => {
 
         // Set a timeout to clear the error message after a specific duration (e.g., 3 seconds)
         if (error) {
+          SweetAlert("error", error)
           setError(error);
           setTimeout(() => setError(""), 3000);
           return;
@@ -96,7 +98,7 @@ export const Signin = () => {
                         Sign In
                     </button>
 
-                    {error && <p className="text-red-600 text-center pt-4">{error}</p>}
+                    {error && <p className="text-red-400 text-center pt-4">{error}</p>}
                     
                     <p className='text-center mt-5'>Already have an account? <Link to="/signup" className='text-blue-500'>Sign Up</Link></p> 
                 </div>    
