@@ -4,7 +4,7 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import { SignUp } from "./components/SignUp";
 import { Signin } from "./components/Signin";
-import { Dashboard } from "./routes/Dashboard";
+import  Dashboard from "./routes/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import { Unauthorized } from "./routes/Unauthorized";
 import { Account } from "./routes/Account";
